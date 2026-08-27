@@ -1,4 +1,3 @@
-import Note from './Note.jsx'
 import { DIALYZERS, QB_REF, QD_REF } from '../lib/dialyzers.js'
 import { clearanceMlMin } from '../lib/model.js'
 import { num } from '../lib/format.js'
@@ -16,9 +15,8 @@ export default function StepReal({ s, derived }) {
       <p className="step__eyebrow">Contraste · Datos de referencia</p>
       <h2 className="step__title">Qué dice un dializador real</h2>
       <p className="step__intro">
-        La consigna pide investigar valores típicos de clearance de urea en dializadores
-        comerciales. Acá el modelo se evalúa al área real de cada cartucho, con el espesor y la
-        difusividad que tenés cargados, y se compara contra el orden de magnitud publicado.
+        El modelo evaluado al área real de cada cartucho, comparado contra el clearance publicado
+        a Qb = {QB_REF} y Qd = {QD_REF} mL/min.
       </p>
 
       <div className="step__body">
@@ -46,23 +44,17 @@ export default function StepReal({ s, derived }) {
           ))}
         </div>
 
-        <Note label="De dónde sale la diferencia">
-          El modelo queda corto, y las razones son las hipótesis que la propia consigna enumera.
-          Falta la <b>convección</b>: en hemodiálisis real hay ultrafiltración, y el soluto también
-          es arrastrado por el solvente. Falta la <b>difusividad efectiva verdadera</b> del polímero
-          comercial, que no tiene por qué ser 1×10⁻¹⁰. Y falta el efecto del{' '}
-          <b>contracorriente</b>: el modelo asume dializado con concentración cero en todo el largo
-          de la fibra, cuando en realidad el dializado se va cargando. Del otro lado, el modelo
-          tampoco ve el techo: ningún dializador puede superar el caudal de sangre que lo atraviesa
-          ({QB_REF} mL/min de referencia, con Qd = {QD_REF}).
-        </Note>
+        <p className="figure__note">
+          <b>Figura 5.</b> Evaluado al área de cartuchos comerciales, el modelo queda por debajo del
+          clearance publicado. La diferencia se debe a que no contempla el aporte convectivo ni el
+          flujo en contracorriente, y a que la difusividad real del polímero no tiene por qué ser
+          1×10⁻¹⁰ m²/s. Concluimos que el modelo difusivo puro da una cota inferior del rendimiento.
+        </p>
 
-        <Note label="Estos números necesitan tu fuente" flag>
-          Los clearances de la tabla son valores aproximados cargados para dar escala, no citas.
-          Cada fabricante publica su tabla en función de Qb, Qd y Qf. Descargá el data sheet del
-          modelo que elijas, tomá el valor a Qb = {QB_REF} y Qd = {QD_REF} mL/min, y citá el
-          documento con su fecha de revisión.
-        </Note>
+        <p className="figure__note figure__note--flag">
+          Clearances de referencia aproximados. Verificar contra el data sheet oficial antes de
+          citarlos.
+        </p>
       </div>
     </section>
   )

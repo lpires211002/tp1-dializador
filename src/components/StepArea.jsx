@@ -1,5 +1,4 @@
 import Chart from './Chart.jsx'
-import Note from './Note.jsx'
 import { areaForClearance, sweepArea } from '../lib/model.js'
 import { num } from '../lib/format.js'
 
@@ -17,8 +16,7 @@ export default function StepArea({ s, set, derived }) {
       <h2 className="step__title">Desafío de optimización</h2>
       <p className="step__intro">
         Manteniendo el espesor en {num(s.L_um, 1)} µm, ¿qué área de membrana hace falta para
-        alcanzar el clearance objetivo? Como <i>Cl</i> es lineal en <i>A</i>, el despeje es directo:
-        <b> A = Cl · L / D</b>.
+        alcanzar el clearance objetivo? El despeje es directo: <b>A = Cl · L / D</b>.
       </p>
 
       <div className="step__body">
@@ -61,16 +59,8 @@ export default function StepArea({ s, set, derived }) {
           filename="clearance-vs-area"
           fmtX={(v) => num(v, 1)}
           fmtY={(v) => num(v, 0)}
-          caption="A diferencia del espesor, el área entra <b>linealmente</b>: la recta pasa por el origen y su pendiente es <code>D/L</code>. Duplicar el área duplica el clearance, sin rendimientos decrecientes — que es exactamente por qué los dializadores comerciales usan haces de miles de fibras huecas en vez de una lámina."
+          caption="<b>Figura 3.</b> La relación es lineal y pasa por el origen, con pendiente <code>D/L</code>. Para alcanzar 150 mL/min manteniendo L = 50 µm se necesitan 1,25 m² de membrana. A diferencia del espesor, duplicar el área duplica el clearance sin rendimientos decrecientes."
         />
-
-        <Note label="Cómo se consigue esa área en la práctica">
-          Un metro y cuarto de superficie no es una placa plana de 1,25 m². Es un haz de{' '}
-          <b>10.000 a 15.000 fibras huecas</b> de unos 200 µm de diámetro interno empaquetadas en
-          un cartucho del tamaño de un vaso. La geometría de placa plana del modelo es una
-          simplificación: lo que se conserva es el producto área × (1/espesor), que es lo que
-          gobierna el transporte.
-        </Note>
       </div>
     </section>
   )

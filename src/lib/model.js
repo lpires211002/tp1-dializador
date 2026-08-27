@@ -128,6 +128,22 @@ export function renkinFactor(rSolute, rPore) {
 }
 
 /**
+ * Difusividad efectiva a partir de las resistencias medidas por Colton (1971).
+ *
+ * En la Tabla III todos los solutos se midieron sobre la MISMA membrana
+ * (Cuprophane PT-150, 37 °C), así que el espesor y el área se cancelan y
+ *
+ *   P_m(soluto) / P_m(urea) = R_m(urea) / R_m(soluto)
+ *
+ * Ese cociente de permeabilidades es también el cociente de clearances. Lo
+ * aplicamos sobre el D de la urea que da la cátedra, de modo que la urea sigue
+ * reproduciendo 120 mL/min y el resto queda anclado a datos experimentales.
+ */
+export function coltonFactor(rmSolute, rmUrea = 17.0) {
+  return rmUrea / rmSolute
+}
+
+/**
  * Difusividad efectiva de un soluto DENTRO de la membrana.
  *
  * Tres modelos, todos calibrados para que la urea reproduzca exactamente el
@@ -143,10 +159,20 @@ export function renkinFactor(rSolute, rPore) {
  *             (ε/τ) se despeja de la urea, de modo que el modelo queda anclado
  *             al dato de la cátedra en vez de ser un número inventado.
  *
+ *   'colton'  D = D_urea,mem · R_m(urea)/R_m(soluto)
+ *             Cociente de resistencias medidas en Cuprophane PT-150.
+ *             Es el único modelo respaldado por medición y no por estimación.
+ *             Si el soluto no figura en Colton 1971, cae a 'stokes'.
+ *
  *   'manual'  El valor que cargue el usuario tras buscarlo en bibliografía.
  */
 export function membraneDiffusivity(solute, { model, rPore, dUreaMem, manual }) {
   if (model === 'manual') return manual
+
+  if (model === 'colton') {
+    if (!solute.rmColton) return dUreaMem * stokesEinsteinFactor(solute.mw)
+    return dUreaMem * coltonFactor(solute.rmColton)
+  }
 
   if (model === 'renkin') {
     const ureaRef = { rs: 0.22, dWater: 1.38e-9 }

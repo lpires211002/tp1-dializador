@@ -16,7 +16,7 @@ const INITIAL = {
   Cd_mM: 0,
   dUreaMem: 1e-10,
   soluteId: 'urea',
-  diffModel: 'stokes',
+  diffModel: 'colton',
   rPore: 2,
   manualD: 3.5e-11,
   targetMlMin: 150,

@@ -190,11 +190,10 @@ export default function MembraneView({ L_um, J, C, Cd = 0, soluteName }) {
       </div>
 
       <p className="membrane__caption">
-        El polímero se dibuja a escala: al mover <b>L</b> la pared cambia de ancho y la rampa de{' '}
-        <b>C(x)</b> cambia de pendiente. Esa pendiente es <code>dC/dx</code>, y su producto por{' '}
-        <b>D</b> es el flujo. Las partículas de {soluteName.toLowerCase()} cruzan a velocidad
-        proporcional a <b>J</b>. Si subís la concentración del dializado, la rampa deja de bajar
-        hasta cero y el gradiente se achica.
+        <b>Figura 1.</b> Corte de la membrana con el perfil de concentración que asume el modelo:
+        constante del lado de la sangre, lineal a través del polímero y nulo en el dializado. Al
+        aumentar el espesor la pendiente del perfil disminuye, y con ella el flujo. Verificamos que
+        con los parámetros del Anexo I el clearance resulta de 120 mL/min.
       </p>
     </div>
   )

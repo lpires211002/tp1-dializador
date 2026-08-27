@@ -1,5 +1,4 @@
 import Chart from './Chart.jsx'
-import Note from './Note.jsx'
 import { clearanceMlMin, sweepThickness } from '../lib/model.js'
 import { num } from '../lib/format.js'
 
@@ -23,9 +22,8 @@ export default function StepThickness({ s, set, derived }) {
       <p className="step__eyebrow">Desarrollo · Paso 2</p>
       <h2 className="step__title">Sensibilidad al espesor</h2>
       <p className="step__intro">
-        Con el área fija en {num(A, 2)} m², el clearance depende sólo de <i>L</i>. La consigna pide
-        una tabla de cinco datos pero enumera cuatro espesores: la quinta fila es editable para que
-        elijas el valor que quieras justificar en el informe.
+        Con el área fija en {num(A, 2)} m², el clearance depende sólo de <i>L</i>. La quinta fila
+        de la tabla es editable.
       </p>
 
       <div className="step__body">
@@ -81,18 +79,9 @@ export default function StepThickness({ s, set, derived }) {
             filename="clearance-vs-espesor"
             fmtX={(v) => num(v, 0)}
             fmtY={(v) => num(v, 0)}
-            caption="La relación es <b>hiperbólica</b>, no lineal: <code>Cl ∝ 1/L</code>. Duplicar el espesor no resta una cantidad fija de clearance, lo parte a la mitad. Por eso el rendimiento se degrada rápido al engrosar la pared y mejora con rendimientos decrecientes al afinarla."
+            caption="<b>Figura 2.</b> La curva es una hipérbola: duplicar el espesor no resta una cantidad fija de clearance, lo parte a la mitad. Pasando de 25 a 100 µm el clearance cae de 240 a 60 mL/min, lo que confirma la dependencia <code>Cl ∝ 1/L</code>. Concluimos que afinar la membrana es la vía más eficaz para mejorar el rendimiento difusivo."
           />
         </div>
-
-        <Note label="Lo que el modelo no ve">
-          La curva sugiere que afinando la membrana el clearance crece sin techo, y no es así. En un
-          dializador real el clearance está acotado por el <b>caudal de sangre</b>: no se puede
-          depurar más sangre por minuto que la que entra al cartucho. Además, menos espesor es
-          <b> menos resistencia mecánica</b> frente a la presión transmembrana, y una fibra que
-          colapsa o se rompe es una falla clínica. Ese compromiso entre transporte y resistencia
-          es el argumento de biomaterial que cierra el objetivo del TP.
-        </Note>
       </div>
     </section>
   )
