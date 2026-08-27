@@ -76,3 +76,29 @@ export const B12_MATERIALES = [
   { id: 'mof', nombre: 'TbMOF-100', tipo: 'Estructura metal-orgánica', D: 1.833e-20,
     fuente: 'Valencia 2012' }
 ]
+
+
+/**
+ * Datos clínicos de clearance de Vitamina B12 en pacientes reales.
+ *
+ * Casino, F. G., Mostacci, S. D., Santarsia, G. & Lopez, T. (2004).
+ * "Vitamin B12 clearance (Kd-B12) in hemodialysis (HD) and hemodiafiltration
+ * (HDF)". Giornale italiano di nefrologia, 21 Supl. 30, S217-222.
+ * PMID 15750989. Recuperado de PubMed.
+ *
+ * KoA es el coeficiente de transferencia de masa por área: KoA = P·A = (D/L)·A.
+ * Es decir, exactamente la misma cantidad que calcula este modelo, de modo que
+ * se puede comparar sin conversión.
+ */
+export const B12_CLINICO = {
+  n: 62,
+  area: 1.9,
+  areaSd: 0.3,
+  koa: 211,
+  koaSd: 92,
+  kdHd: 105,
+  kdHdSd: 13,
+  kdHdf: 152,
+  kdHdfSd: 34,
+  fuente: 'Casino et al. 2004 · PMID 15750989'
+}

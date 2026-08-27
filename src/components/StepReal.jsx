@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { DIALYZERS, QB_REF, QD_REF } from '../lib/dialyzers.js'
+import { DIALYZERS, QB_REF, QD_REF, B12_CLINICO } from '../lib/dialyzers.js'
 import { clearanceMlMin } from '../lib/model.js'
 import { num } from '../lib/format.js'
+import { SOLUTES, RM_UREA_COLTON } from '../lib/solutes.js'
 
 /**
  * Anexo opcional — contraste contra dializadores comerciales.
@@ -10,6 +11,15 @@ import { num } from '../lib/format.js'
 export default function StepReal({ s, derived }) {
   const [open, setOpen] = useState(false)
   const L = s.L_um * 1e-6
+
+  // Vitamina B12: el modelo evaluado al área media de la serie clínica.
+  const b12 = SOLUTES.find((x) => x.id === 'b12')
+  const modeloB12 = clearanceMlMin({
+    D: s.dUreaMem * (RM_UREA_COLTON / b12.rmColton),
+    A: B12_CLINICO.area,
+    L,
+    factor: derived.factor
+  })
 
   const rows = DIALYZERS.map((d) => {
     const modelo = clearanceMlMin({ D: derived.D, A: d.area, L, factor: derived.factor })
@@ -78,6 +88,50 @@ export default function StepReal({ s, derived }) {
           <p className="figure__note figure__note--flag">
             Clearances de referencia aproximados. Verificar contra el data sheet oficial antes de
             citarlos.
+          </p>
+
+          <h3 className="anexo__sub">Vitamina B12 en pacientes reales</h3>
+          <div className="real">
+            <div className="realrow realrow--head">
+              <span className="realcell">Magnitud</span>
+              <span className="realcell">Valor</span>
+              <span className="realcell">Qué es</span>
+            </div>
+            <div className="realrow realrow--tres">
+              <span className="realcell realcell--name">Modelo a {num(B12_CLINICO.area, 1)} m²</span>
+              <span className="realcell realcell--gap">{num(modeloB12, 1)} mL/min</span>
+              <span className="realcell realcell--sub2">Difusión pura, membrana del enunciado</span>
+            </div>
+            <div className="realrow realrow--tres">
+              <span className="realcell realcell--name">KoA-B12 medido</span>
+              <span className="realcell">{B12_CLINICO.koa} ± {B12_CLINICO.koaSd} mL/min</span>
+              <span className="realcell realcell--sub2">
+                Coeficiente de transferencia por área: es el mismo <i>D·A/L</i> del modelo
+              </span>
+            </div>
+            <div className="realrow realrow--tres">
+              <span className="realcell realcell--name">Kd-B12 en hemodiálisis</span>
+              <span className="realcell">{B12_CLINICO.kdHd} ± {B12_CLINICO.kdHdSd} mL/min</span>
+              <span className="realcell realcell--sub2">Clearance efectivamente alcanzado</span>
+            </div>
+            <div className="realrow realrow--tres">
+              <span className="realcell realcell--name">Kd-B12 en hemodiafiltración</span>
+              <span className="realcell">{B12_CLINICO.kdHdf} ± {B12_CLINICO.kdHdfSd} mL/min</span>
+              <span className="realcell realcell--sub2">La diferencia contra HD es aporte convectivo</span>
+            </div>
+          </div>
+
+          <p className="figure__note">
+            El modelo predice {num(modeloB12, 1)} mL/min donde la práctica clínica mide un KoA de{' '}
+            {B12_CLINICO.koa} mL/min, unas {num(B12_CLINICO.koa / modeloB12, 0)} veces más. Dos
+            razones: las membranas sintéticas actuales son mucho más permeables a las moléculas
+            medias que la celulosa regenerada de 1971, y el salto de {B12_CLINICO.kdHd} a{' '}
+            {B12_CLINICO.kdHdf} mL/min al pasar a hemodiafiltración es <b>convección pura</b>, que
+            el modelo difusivo no contempla. Serie de {B12_CLINICO.n} pacientes.
+          </p>
+
+          <p className="figure__note figure__note--flag">
+            {B12_CLINICO.fuente}. Datos recuperados de PubMed.
           </p>
         </div>
       </div>

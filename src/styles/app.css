@@ -1029,3 +1029,17 @@
 .answer__matn { font-size: 13px; color: var(--ink); }
 .answer__matt { display: block; font-family: var(--mono); font-size: 10px; color: var(--ink-3); margin-top: 2px; }
 .answer__matd, .answer__matc { font-family: var(--mono); font-size: 12.5px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+
+.anexo__sub {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 21px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 40px 0 16px;
+}
+
+.realrow--tres { grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.8fr) minmax(0, 1.6fr); }
+@media (max-width: 760px) { .realrow--tres { grid-template-columns: minmax(0, 1fr); } }
+.realcell--sub2 { font-family: var(--sans); font-size: 12.5px; color: var(--ink-3); }
+.realcell--sub2 i { font-family: var(--display); font-style: italic; }
