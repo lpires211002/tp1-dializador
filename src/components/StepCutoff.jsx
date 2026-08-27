@@ -78,17 +78,21 @@ export default function StepCutoff({ s, set, derived }) {
               <span className="answer__why">dentro de la fase membrana</span>
             </div>
             <div className="answer__row answer__row--out">
-              <span className="answer__eq">Clearance con ese <i>D</i></span>
-              <strong className="answer__val">{num(clMedido, 2)} mL/min</strong>
-              <span className="answer__why">a L = {num(s.L_um, 1)} µm y A = {num(s.A_m2, 2)} m²</span>
+              <span className="answer__eq">Cociente medido B12 / urea</span>
+              <strong className="answer__val">{num(b12Ref.rmColton && 17 / b12Ref.rmColton, 4)}</strong>
+              <span className="answer__why">
+                <i>R</i><sub>m</sub>(urea) / <i>R</i><sub>m</sub>(B12) — es lo que se traslada al modelo
+              </span>
             </div>
           </div>
 
           <p className="answer__nota">
-            El simulador de abajo mantiene el anclaje de la cátedra (<i>D</i> urea = 1×10⁻¹⁰ m²/s) y
-            por eso da un clearance menor para la B12. La diferencia es real y tiene explicación: el
-            Cuprophane que midió Colton es <b>2,74× más permeable a la urea</b> que la membrana
-            genérica de la consigna, así que el mismo soluto rinde más en él.
+            La membrana del enunciado no es el Cuprophane: es genérica, con <i>D</i> urea =
+            1×10⁻¹⁰ m²/s. Lo que se traslada de Colton es el <b>cociente</b>, que es propiedad del
+            par soluto–membrana y no depende del valor absoluto. Con ese cociente el clearance de la
+            B12 da <b>{num(b12.cl, 2)} mL/min</b>. Usando en cambio el valor absoluto medido daría{' '}
+            {num(clMedido, 2)} mL/min, pero entonces la urea daría 328,7 y no los 120 de la
+            consigna: el Cuprophane real es 2,74× más permeable.
           </p>
         </div>
 
