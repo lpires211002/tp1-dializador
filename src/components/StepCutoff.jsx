@@ -120,6 +120,8 @@ export default function StepCutoff({ s, set, derived }) {
                   <td>{r.mw.toLocaleString('es-AR')}</td>
                   <td>
                     {sci(r.dWater, 2)}
+                    {r.dWaterAcc && <span className="acc">± {r.dWaterAcc} %</span>}
+                    {r.dWaterKind === 'correlación' && <span className="flagmark">correlación</span>}
                     {!r.dWaterSrc && <span className="flagmark">sin fuente</span>}
                   </td>
                   <td>
@@ -146,9 +148,12 @@ export default function StepCutoff({ s, set, derived }) {
         </p>
 
         <p className="figure__note">
-          <b>Procedencia de los datos.</b> Las difusividades en agua salen de la Tabla I de Colton
-          (solución salina isotónica, 37 °C), salvo las de fosfato y β₂-microglobulina, que no
-          figuran en ese trabajo y están cargadas como valores típicos de literatura sin verificar.
+          <b>Procedencia de los datos.</b> La Tabla I de Colton no involucra membranas: son
+          difusividades en solución libre (salina isotónica, 37 °C). Distingue por columnas si el
+          valor fue medido, tomado de literatura o estimado por correlación, y declara la precisión
+          de cada uno. El de la Vitamina B12 <b>no fue medido</b>: es una estimación por la
+          correlación de Polson con ± 15 % declarado. Fosfato y β₂-microglobulina no figuran en ese
+          trabajo y están cargados como valores típicos sin verificar.
           La difusividad de la urea <i>en la membrana</i> es la que da la consigna, no Colton: lo
           que aporta el paper es la resistencia de cada soluto (Tabla III, Cuprophane PT-150,
           37 °C), cuyo cociente contra la urea permite derivar las demás. La resistencia de la

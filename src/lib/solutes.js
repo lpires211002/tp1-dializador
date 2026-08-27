@@ -17,6 +17,10 @@
  * PROCEDENCIA POR CAMPO
  * Cada valor lleva su propia fuente, porque no todos vienen del mismo lado:
  *   · dWaterSrc  de dónde sale la difusividad en agua.
+ *   · dWaterKind  cómo la obtuvo Colton: medición propia, literatura, o
+ *                 estimación por correlación (Wilke-Chang si MW < 1000,
+ *                 Polson si MW > 1000). La Tabla I lo distingue por columnas.
+ *   · dWaterAcc   precisión declarada por los autores, en %.
  *   · dMemSrc    de dónde sale la difusividad EN LA MEMBRANA, que es la que
  *                gobierna el clearance.
  * Un `null` significa que el simulador lo estimó y hace falta buscar fuente.
@@ -44,6 +48,8 @@ export const SOLUTES = [
     mw: 60.06,
     dWater: 1.81e-9,
     dWaterSrc: 'Colton, Tabla I',
+    dWaterKind: 'medido',
+    dWaterAcc: 3,
     rs: 0.22,
     rmColton: 17.0,
     dMemSrc: 'Consigna',
@@ -58,6 +64,8 @@ export const SOLUTES = [
     mw: 113.1,
     dWater: 1.29e-9,
     dWaterSrc: 'Colton, Tabla I',
+    dWaterKind: 'medido',
+    dWaterAcc: 10,
     rs: 0.30,
     rmColton: 30.8,
     dMemSrc: 'Colton, Tabla III',
@@ -83,6 +91,8 @@ export const SOLUTES = [
     mw: 1355,
     dWater: 3.79e-10,
     dWaterSrc: 'Colton, Tabla I',
+    dWaterKind: 'correlación',
+    dWaterAcc: 15,
     rs: 0.85,
     rmColton: 242,
     dMemSrc: 'Colton, Tabla III',
@@ -109,6 +119,8 @@ export const SOLUTES = [
     mw: 66000,
     dWater: 9.09e-11,
     dWaterSrc: 'Colton, Tabla I',
+    dWaterKind: 'literatura',
+    dWaterAcc: 10,
     rs: 3.5,
     rmColton: 5.9e5,
     dMemSrc: 'Colton, Tabla V · 27 °C',
