@@ -1,12 +1,13 @@
 /** Utilidades de formato. Todo número que se muestra pasa por acá. */
 
-/** Notación científica legible: 1.0000e-5 -> "1,0000 × 10⁻⁵" */
+/** Notación científica legible: 1.0000e-5 -> "1,0000 × 10⁻⁵".
+ *  Usa espacios duros para que el número nunca se parta en dos renglones. */
 export function sci(value, digits = 4) {
   if (!isFinite(value)) return '—'
   if (value === 0) return '0'
   const exp = Math.floor(Math.log10(Math.abs(value)))
   const mant = value / 10 ** exp
-  return `${mant.toFixed(digits).replace('.', ',')} × 10${sup(exp)}`
+  return `${mant.toFixed(digits).replace('.', ',')}\u00A0×\u00A010${sup(exp)}`
 }
 
 const SUP = { '-': '⁻', 0: '⁰', 1: '¹', 2: '²', 3: '³', 4: '⁴', 5: '⁵', 6: '⁶', 7: '⁷', 8: '⁸', 9: '⁹' }

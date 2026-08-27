@@ -110,7 +110,7 @@ export default function StepCutoff({ s, set, derived }) {
                 <th scope="col">D en membrana</th>
                 <th scope="col">Cl</th>
                 <th scope="col">Cl / Cl urea</th>
-                <th scope="col">Origen de D en membrana</th>
+                <th scope="col">Origen de D</th>
               </tr>
             </thead>
             <tbody>
@@ -131,7 +131,7 @@ export default function StepCutoff({ s, set, derived }) {
                   <td>{r.cl < 0.005 ? sci(r.cl, 2) : num(r.cl, 2)}</td>
                   <td className="table__delta">{r.cl / urea.cl < 0.001 ? sci(r.cl / urea.cl, 2) : num(r.cl / urea.cl, 4)}</td>
                   <td className="table__delta">
-                    {s.diffModel === 'colton' && r.dMemSrc ? r.dMemSrc : 'Estimado por el modelo'}
+                    {s.diffModel === 'colton' && r.dMemSrc ? r.dMemSrc : 'Estimado'}
                   </td>
                 </tr>
               ))}
