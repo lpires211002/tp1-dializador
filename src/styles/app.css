@@ -848,3 +848,13 @@
   transition: background var(--tr), color var(--tr), border-color var(--tr);
 }
 .readout__collapse:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.models__legend {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 10px;
+}
+.models__legend i { font-family: var(--display); font-style: italic; font-size: 13px; color: var(--ink-2); }

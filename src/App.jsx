@@ -18,7 +18,6 @@ const INITIAL = {
   soluteId: 'urea',
   diffModel: 'colton',
   rPore: 2,
-  manualD: 3.5e-11,
   targetMlMin: 150,
   fifthL: 150
 }
@@ -40,8 +39,7 @@ export default function App() {
       : membraneDiffusivity(solute, {
           model: st.diffModel,
           rPore: st.rPore,
-          dUreaMem: st.dUreaMem,
-          manual: st.manualD
+          dUreaMem: st.dUreaMem
         })
 
     const factor = gradientFactor({ C: st.C_mM, Cd: st.Cd_mM })

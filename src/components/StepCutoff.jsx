@@ -18,17 +18,12 @@ const MODELS = [
     id: 'renkin',
     name: 'Difusión estorbada (Renkin)',
     desc: 'Suma exclusión estérica e impedimento en el poro.'
-  },
-  {
-    id: 'manual',
-    name: 'Valor de bibliografía',
-    desc: 'El D que encuentres y puedas citar.'
   }
 ]
 
 /** Paso 4 — Cálculo de eficiencia y cut-off de la membrana. */
 export default function StepCutoff({ s, set, derived }) {
-  const opts = { model: s.diffModel, rPore: s.rPore, dUreaMem: s.dUreaMem, manual: s.manualD }
+  const opts = { model: s.diffModel, rPore: s.rPore, dUreaMem: s.dUreaMem }
   const L = s.L_um * 1e-6
 
   const rows = SOLUTES.map((sol) => {
@@ -52,6 +47,9 @@ export default function StepCutoff({ s, set, derived }) {
       </p>
 
       <div className="step__body">
+        <p className="models__legend">
+          Cómo se obtiene <i>D</i> para los solutos distintos de la urea
+        </p>
         <div className="models" role="group" aria-label="Modelo de estimación de la difusividad">
           {MODELS.map((m) => (
             <button
@@ -78,27 +76,6 @@ export default function StepCutoff({ s, set, derived }) {
             <p className="poro__note">
               Porosidad/tortuosidad efectiva despejada del anclaje de la urea:{' '}
               <b>ε/τ = {num(epsTau, 3)}</b>.
-            </p>
-          </div>
-        )}
-
-        {s.diffModel === 'manual' && (
-          <div className="target">
-            <div className="target__field">
-              <span className="target__label">D de {s.soluteName} en la membrana (× 10⁻¹² m²/s)</span>
-              <input
-                className="target__input"
-                type="number"
-                min="0.01"
-                max="1000"
-                step="0.5"
-                value={Number((s.manualD * 1e12).toFixed(3))}
-                onChange={(e) => set.manualD((Number(e.target.value) || 0.01) * 1e-12)}
-                aria-label="Difusividad manual en la membrana"
-              />
-            </div>
-            <p className="poro__note">
-              Valor de bibliografía. Registrar fuente, polímero y temperatura.
             </p>
           </div>
         )}

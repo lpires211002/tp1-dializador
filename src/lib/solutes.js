@@ -21,6 +21,13 @@
 /** Resistencia de la urea en Cuprophane PT-150 [min/cm]. Referencia del cociente. */
 export const RM_UREA_COLTON = 17.0
 
+/**
+ * Referencia de la urea usada para anclar los modelos estimativos.
+ * Es la ÚNICA definición de estos valores: model.js la importa de acá para
+ * que no puedan quedar desincronizados.
+ */
+export const UREA_REF = { rs: 0.22, dWater: 1.81e-9 }
+
 export const SOLUTES = [
   {
     id: 'urea',

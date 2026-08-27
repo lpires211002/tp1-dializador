@@ -1,3 +1,5 @@
+import { UREA_REF } from './solutes.js'
+
 /**
  * model.js — Transferencia de masa a través de la membrana de un dializador.
  *
@@ -163,23 +165,18 @@ export function coltonFactor(rmSolute, rmUrea = 17.0) {
  *             Cociente de resistencias medidas en Cuprophane PT-150.
  *             Es el único modelo respaldado por medición y no por estimación.
  *             Si el soluto no figura en Colton 1971, cae a 'stokes'.
- *
- *   'manual'  El valor que cargue el usuario tras buscarlo en bibliografía.
  */
-export function membraneDiffusivity(solute, { model, rPore, dUreaMem, manual }) {
-  if (model === 'manual') return manual
-
+export function membraneDiffusivity(solute, { model, rPore, dUreaMem }) {
   if (model === 'colton') {
     if (!solute.rmColton) return dUreaMem * stokesEinsteinFactor(solute.mw)
     return dUreaMem * coltonFactor(solute.rmColton)
   }
 
   if (model === 'renkin') {
-    const ureaRef = { rs: 0.22, dWater: 1.38e-9 }
-    const hUrea = renkinFactor(ureaRef.rs, rPore)
+    const hUrea = renkinFactor(UREA_REF.rs, rPore)
     if (hUrea <= 0) return 0
     // Porosidad/tortuosidad efectiva despejada del anclaje de la urea.
-    const epsOverTau = dUreaMem / (ureaRef.dWater * hUrea)
+    const epsOverTau = dUreaMem / (UREA_REF.dWater * hUrea)
     return solute.dWater * renkinFactor(solute.rs, rPore) * epsOverTau
   }
 
@@ -188,8 +185,8 @@ export function membraneDiffusivity(solute, { model, rPore, dUreaMem, manual }) 
 
 /** Porosidad/tortuosidad efectiva implícita, para mostrarla como diagnóstico. */
 export function effectivePorosity({ rPore, dUreaMem }) {
-  const h = renkinFactor(0.22, rPore)
-  return h > 0 ? dUreaMem / (1.38e-9 * h) : NaN
+  const h = renkinFactor(UREA_REF.rs, rPore)
+  return h > 0 ? dUreaMem / (UREA_REF.dWater * h) : NaN
 }
 
 /** Barrido de clearance en función del espesor. Devuelve puntos {L_um, cl}. */
