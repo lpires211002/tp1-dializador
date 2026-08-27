@@ -1,6 +1,8 @@
 import Field from './Field.jsx'
-import { SOLUTES } from '../lib/solutes.js'
-import { clearanceMlMin, membraneDiffusivity, effectivePorosity } from '../lib/model.js'
+import { SOLUTES, TM_CUPROPHANE_MILS } from '../lib/solutes.js'
+import {
+  clearanceMlMin, membraneDiffusivity, effectivePorosity, measuredKsD, measuredDm
+} from '../lib/model.js'
 import { num, sci } from '../lib/format.js'
 
 const MODELS = [
@@ -37,6 +39,12 @@ export default function StepCutoff({ s, set, derived }) {
   const b12 = rows.find((r) => r.id === 'b12')
   const epsTau = effectivePorosity({ rPore: s.rPore, dUreaMem: s.dUreaMem })
 
+  // Respuesta directa a la consigna: D de la B12 medido en un polímero real.
+  const b12Ref = SOLUTES.find((x) => x.id === 'b12')
+  const ksD = measuredKsD(b12Ref.rmColton, TM_CUPROPHANE_MILS)
+  const dm = measuredDm(b12Ref.rmColton, TM_CUPROPHANE_MILS, b12Ref.ksColton)
+  const clMedido = clearanceMlMin({ D: ksD, A: s.A_m2, L, factor: derived.factor })
+
   return (
     <section className="step" id="paso-4">
       <p className="step__eyebrow">Desarrollo · Paso 4</p>
@@ -47,6 +55,43 @@ export default function StepCutoff({ s, set, derived }) {
       </p>
 
       <div className="step__body">
+        <div className="answer">
+          <p className="answer__legend">
+            Coeficiente de difusión investigado · Vitamina B12 en celulosa regenerada
+          </p>
+          <div className="answer__given">
+            <span><i>R</i><sub>m</sub> = {b12Ref.rmColton} min/cm</span>
+            <span><i>t</i><sub>m</sub> = {num(TM_CUPROPHANE_MILS, 2)} mils = {num(TM_CUPROPHANE_MILS * 25.4, 1)} µm</span>
+            <span><i>K</i><sub>s</sub> = {num(b12Ref.ksColton, 2)}</span>
+          </div>
+          <p className="answer__src">Cuprophane PT-150 · 37 °C · Colton 1971, Tablas III y VII</p>
+
+          <div className="answer__rows">
+            <div className="answer__row">
+              <span className="answer__eq"><i>K</i><sub>s</sub>·<i>D</i><sub>m</sub> = <i>t</i><sub>m</sub> / <i>R</i><sub>m</sub></span>
+              <strong className="answer__val">{sci(ksD, 2)} m²/s</strong>
+              <span className="answer__why">es el <i>D</i> que usa el modelo del TP</span>
+            </div>
+            <div className="answer__row">
+              <span className="answer__eq"><i>D</i><sub>m</sub> = <i>K</i><sub>s</sub>·<i>D</i><sub>m</sub> / <i>K</i><sub>s</sub></span>
+              <strong className="answer__val">{sci(dm, 2)} m²/s</strong>
+              <span className="answer__why">dentro de la fase membrana</span>
+            </div>
+            <div className="answer__row answer__row--out">
+              <span className="answer__eq">Clearance con ese <i>D</i></span>
+              <strong className="answer__val">{num(clMedido, 2)} mL/min</strong>
+              <span className="answer__why">a L = {num(s.L_um, 1)} µm y A = {num(s.A_m2, 2)} m²</span>
+            </div>
+          </div>
+
+          <p className="answer__nota">
+            El simulador de abajo mantiene el anclaje de la cátedra (<i>D</i> urea = 1×10⁻¹⁰ m²/s) y
+            por eso da un clearance menor para la B12. La diferencia es real y tiene explicación: el
+            Cuprophane que midió Colton es <b>2,74× más permeable a la urea</b> que la membrana
+            genérica de la consigna, así que el mismo soluto rinde más en él.
+          </p>
+        </div>
+
         <p className="models__legend">
           Cómo se obtiene <i>D</i> para los solutos distintos de la urea
         </p>

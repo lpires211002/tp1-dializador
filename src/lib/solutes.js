@@ -8,6 +8,9 @@
  *
  *   · dWater  Tabla I, columna "Value used this study": difusividad en solución
  *             salina isotónica a 37 °C, dilución infinita [m²/s].
+ *   · ksColton  Tabla VII, coeficiente de partición de equilibrio K_s en
+ *                Cuprophane PT-150. Hace falta para pasar de la permeabilidad
+ *                medida a la difusividad dentro de la fase membrana.
  *   · rmColton  Tabla III, Cuprophane PT-150 sin soluto no marcado, 37 °C,
  *             espesor húmedo 1,10 mils (28 µm). Resistencia de membrana
  *             R_m [min/cm]. Como todos se midieron en la MISMA membrana, el
@@ -40,6 +43,9 @@ export const RM_UREA_COLTON = 17.0
  */
 export const UREA_REF = { rs: 0.22, dWater: 1.81e-9 }
 
+/** Espesor húmedo del Cuprophane PT-150 en la Tabla III de Colton, en mils. */
+export const TM_CUPROPHANE_MILS = 1.10
+
 export const SOLUTES = [
   {
     id: 'urea',
@@ -52,6 +58,7 @@ export const SOLUTES = [
     dWaterAcc: 3,
     rs: 0.22,
     rmColton: 17.0,
+    ksColton: 0.67,
     dMemSrc: 'Consigna',
     clase: 'Pequeña',
     anchor: true,
@@ -68,6 +75,7 @@ export const SOLUTES = [
     dWaterAcc: 10,
     rs: 0.30,
     rmColton: 30.8,
+    ksColton: 0.61,
     dMemSrc: 'Colton, Tabla III',
     clase: 'Pequeña',
     nota: 'Casi el doble de masa que la urea, pero difunde casi igual: la dependencia con M^(1/3) es débil.'
@@ -95,6 +103,7 @@ export const SOLUTES = [
     dWaterAcc: 15,
     rs: 0.85,
     rmColton: 242,
+    ksColton: 0.97,
     dMemSrc: 'Colton, Tabla III',
     highlight: true,
     clase: 'Media',

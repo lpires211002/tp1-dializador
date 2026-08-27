@@ -22,6 +22,9 @@ import { UREA_REF } from './solutes.js'
 /** 1 m³/s expresado en mL/min: 1e6 mL/m³ × 60 s/min. */
 export const M3S_TO_ML_MIN = 6e7
 
+/** 1 mil (milésima de pulgada) en metros. Colton tabula espesores en mils. */
+export const MIL_TO_M = 2.54e-5
+
 /** Peso molecular de la urea, g/mol. Referencia del escalado de difusividad. */
 export const MW_UREA = 60.06
 
@@ -187,6 +190,28 @@ export function membraneDiffusivity(solute, { model, rPore, dUreaMem }) {
 export function effectivePorosity({ rPore, dUreaMem }) {
   const h = renkinFactor(UREA_REF.rs, rPore)
   return h > 0 ? dUreaMem / (UREA_REF.dWater * h) : NaN
+}
+
+/**
+ * Difusividad efectiva MEDIDA, a partir de la resistencia de membrana.
+ *
+ * Colton tabula R_m [min/cm] y el espesor húmedo t_m [mils]. La permeabilidad
+ * es P = 1/R_m, y por definición P = K_s·D_m/L, de donde
+ *
+ *   K_s · D_m = L / R_m        [m²/s]
+ *
+ * Ese producto es exactamente el "D" del modelo del TP, porque el clearance se
+ * define contra la concentración del lado de la sangre: Cl = (K_s·D_m/L)·A.
+ * Dividiendo por el coeficiente de partición K_s se obtiene la difusividad
+ * dentro de la fase membrana propiamente dicha.
+ */
+export function measuredKsD(rmMinCm, thicknessMils) {
+  const rmSecPerM = rmMinCm * 60 * 100
+  return (thicknessMils * MIL_TO_M) / rmSecPerM
+}
+
+export function measuredDm(rmMinCm, thicknessMils, ks) {
+  return measuredKsD(rmMinCm, thicknessMils) / ks
 }
 
 /** Barrido de clearance en función del espesor. Devuelve puntos {L_um, cl}. */
