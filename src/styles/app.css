@@ -997,3 +997,35 @@
 .answer__nota { font-size: 13px; line-height: 1.62; color: var(--ink-2); margin: 16px 0 0; max-width: var(--measure); }
 .answer__nota b { color: var(--ink); font-weight: 600; }
 .answer__nota i { font-style: italic; }
+
+.answer__mas { margin-top: 18px; border-top: 1px solid var(--rule); padding-top: 14px; }
+
+.answer__mas summary {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--accent-deep);
+  cursor: pointer;
+  list-style: none;
+}
+.answer__mas summary::-webkit-details-marker { display: none; }
+.answer__mas summary::before { content: '▸ '; }
+.answer__mas[open] summary::before { content: '▾ '; }
+
+.answer__tabla { margin-top: 14px; display: grid; gap: 1px; }
+
+.answer__mat {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.9fr) minmax(0, 1.2fr);
+  gap: 12px;
+  align-items: baseline;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--rule);
+}
+@media (max-width: 700px) { .answer__mat { grid-template-columns: minmax(0, 1fr); gap: 3px; } }
+
+.answer__mat[data-usable='true'] { background: var(--accent-wash); }
+.answer__matn { font-size: 13px; color: var(--ink); }
+.answer__matt { display: block; font-family: var(--mono); font-size: 10px; color: var(--ink-3); margin-top: 2px; }
+.answer__matd, .answer__matc { font-family: var(--mono); font-size: 12.5px; color: var(--ink-2); font-variant-numeric: tabular-nums; }

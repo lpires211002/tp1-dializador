@@ -1,5 +1,6 @@
 import Field from './Field.jsx'
 import { SOLUTES, TM_CUPROPHANE_MILS } from '../lib/solutes.js'
+import { B12_MATERIALES } from '../lib/dialyzers.js'
 import {
   clearanceMlMin, membraneDiffusivity, effectivePorosity, measuredKsD, measuredDm
 } from '../lib/model.js'
@@ -85,6 +86,34 @@ export default function StepCutoff({ s, set, derived }) {
               </span>
             </div>
           </div>
+
+          <details className="answer__mas">
+            <summary>Otras fuentes consultadas y por qué se descartaron</summary>
+            <div className="answer__tabla">
+              {B12_MATERIALES.map((m) => {
+                const c = clearanceMlMin({ D: m.D, A: s.A_m2, L, factor: derived.factor })
+                return (
+                  <div className="answer__mat" key={m.id} data-usable={!!m.usable}>
+                    <span className="answer__matn">
+                      {m.nombre}
+                      <span className="answer__matt">{m.tipo} · {m.fuente}</span>
+                    </span>
+                    <span className="answer__matd">{sci(m.D, 2)}</span>
+                    <span className="answer__matc">
+                      {c < 0.01 ? '≈ 0' : num(c, 1)} mL/min
+                      {c > urea.cl && <span className="flagmark">más rápido que la urea</span>}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+            <p className="answer__nota">
+              Sólo el Cuprophane sirve: es el único caso donde la misma fuente midió también la urea
+              sobre el mismo material. Un <i>D</i> suelto de otro material, combinado con el de urea
+              del enunciado, da resultados imposibles — el gellan gum haría que la B12 depurara más
+              rápido que la urea, siendo veintidós veces más pesada.
+            </p>
+          </details>
 
           <p className="answer__nota">
             La membrana del enunciado no es el Cuprophane: es genérica, con <i>D</i> urea =

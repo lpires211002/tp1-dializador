@@ -53,3 +53,26 @@ export const DIALYZERS = [
 /** Caudal de sangre de referencia al que se suelen tabular los clearances. */
 export const QB_REF = 300
 export const QD_REF = 500
+
+
+/**
+ * Coeficientes de difusión de la Vitamina B12 reportados para distintos
+ * materiales. Sirven para mostrar que D es propiedad del par soluto–material
+ * y no de la molécula sola.
+ *
+ * ⚠ Sólo el Cuprophane es utilizable para el TP: es el único caso donde la
+ * MISMA fuente midió también la urea sobre el MISMO material, que es lo que
+ * hace trasladable el cociente entre solutos.
+ */
+export const B12_MATERIALES = [
+  { id: 'agua', nombre: 'Agua libre', tipo: 'Referencia, sin material', D: 3.79e-10,
+    fuente: 'Colton 1971, Tabla I' },
+  { id: 'gellan', nombre: 'Gellan gum', tipo: 'Hidrogel de polisacárido', D: 1.70e-10,
+    fuente: 'Ferris & in het Panhuis 2010' },
+  { id: 'gellan-cnt', nombre: 'Gellan gum + nanotubos', tipo: 'Compuesto', D: 0.70e-10,
+    fuente: 'Ferris & in het Panhuis 2010' },
+  { id: 'cuprophane', nombre: 'Cuprophane PT-150', tipo: 'Membrana de diálisis', D: 1.9243e-11,
+    fuente: 'Colton 1971, Tablas III y VII', usable: true },
+  { id: 'mof', nombre: 'TbMOF-100', tipo: 'Estructura metal-orgánica', D: 1.833e-20,
+    fuente: 'Valencia 2012' }
+]
