@@ -14,8 +14,16 @@
  *             cociente R_m(urea)/R_m(soluto) es directamente el cociente de
  *             permeabilidades, y por lo tanto de clearances.
  *
- * Los solutos sin rmColton no figuran en el trabajo de Colton: para esos, el
- * simulador estima D y lo marca como estimado.
+ * PROCEDENCIA POR CAMPO
+ * Cada valor lleva su propia fuente, porque no todos vienen del mismo lado:
+ *   · dWaterSrc  de dónde sale la difusividad en agua.
+ *   · dMemSrc    de dónde sale la difusividad EN LA MEMBRANA, que es la que
+ *                gobierna el clearance.
+ * Un `null` significa que el simulador lo estimó y hace falta buscar fuente.
+ *
+ * OJO con la urea: su D en membrana (1e-10 m²/s) la da la CONSIGNA, no Colton.
+ * Colton aporta su difusividad en agua y su resistencia de membrana, que se usa
+ * como referencia del cociente, pero el valor absoluto es el de cátedra.
  */
 
 /** Resistencia de la urea en Cuprophane PT-150 [min/cm]. Referencia del cociente. */
@@ -35,9 +43,10 @@ export const SOLUTES = [
     formula: 'CH₄N₂O',
     mw: 60.06,
     dWater: 1.81e-9,
+    dWaterSrc: 'Colton, Tabla I',
     rs: 0.22,
     rmColton: 17.0,
-    fuente: 'Colton 1971, Tablas I y III',
+    dMemSrc: 'Consigna',
     clase: 'Pequeña',
     anchor: true,
     nota: 'El soluto de referencia del TP. Marcador estándar de adecuación de diálisis (Kt/V).'
@@ -48,9 +57,10 @@ export const SOLUTES = [
     formula: 'C₄H₇N₃O',
     mw: 113.1,
     dWater: 1.29e-9,
+    dWaterSrc: 'Colton, Tabla I',
     rs: 0.30,
     rmColton: 30.8,
-    fuente: 'Colton 1971, Tablas I y III',
+    dMemSrc: 'Colton, Tabla III',
     clase: 'Pequeña',
     nota: 'Casi el doble de masa que la urea, pero difunde casi igual: la dependencia con M^(1/3) es débil.'
   },
@@ -58,12 +68,13 @@ export const SOLUTES = [
     id: 'fosfato',
     name: 'Fosfato',
     formula: 'HPO₄²⁻',
-    mw: 95.0,
+    mw: 95.98,
     dWater: 0.76e-9,
+    dWaterSrc: null,
     rs: 0.28,
-    fuente: null,
+    dMemSrc: null,
     clase: 'Pequeña',
-    nota: 'No figura en Colton 1971. Ion hidratado: su radio efectivo es mayor de lo que sugiere su masa.'
+    nota: 'No figura en Colton 1971. La difusividad en agua es un valor típico de literatura a ~25 °C: hay que buscar fuente y temperatura.'
   },
   {
     id: 'b12',
@@ -71,9 +82,10 @@ export const SOLUTES = [
     formula: 'C₆₃H₈₈CoN₁₄O₁₄P',
     mw: 1355,
     dWater: 3.79e-10,
+    dWaterSrc: 'Colton, Tabla I',
     rs: 0.85,
     rmColton: 242,
-    fuente: 'Colton 1971, Tablas I y III',
+    dMemSrc: 'Colton, Tabla III',
     highlight: true,
     clase: 'Media',
     nota: 'El soluto que pide analizar la consigna. Marcador clásico del rango de "moléculas medias".'
@@ -84,10 +96,11 @@ export const SOLUTES = [
     formula: 'Proteína, 99 aa',
     mw: 11800,
     dWater: 8.0e-11,
+    dWaterSrc: null,
     rs: 1.6,
-    fuente: null,
+    dMemSrc: null,
     clase: 'Media-grande',
-    nota: 'No figura en Colton 1971 (su rol clínico se describió después). Objetivo de las membranas high-flux.'
+    nota: 'No figura en Colton 1971 (su rol clínico se describió después). La difusividad en agua es un valor típico de literatura: hay que buscar fuente y temperatura.'
   },
   {
     id: 'albumina',
@@ -95,13 +108,13 @@ export const SOLUTES = [
     formula: 'Proteína, 585 aa',
     mw: 66000,
     dWater: 9.09e-11,
+    dWaterSrc: 'Colton, Tabla I',
     rs: 3.5,
     rmColton: 5.9e5,
-    rmColtonTemp: 27,
-    fuente: 'Colton 1971, Tabla I (37 °C) y Tabla V (R_m a 27 °C)',
+    dMemSrc: 'Colton, Tabla V · 27 °C',
     keep: true,
     clase: 'Grande',
-    nota: 'Colton midió permeación medible pero extremadamente lenta: la medición con Cuprophane requirió 96 h.'
+    nota: 'Colton midió permeación medible pero extremadamente lenta: la medición con Cuprophane requirió 96 h, y su resistencia se reporta a 27 °C y no a 37 como el resto.'
   }
 ]
 

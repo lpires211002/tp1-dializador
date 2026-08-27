@@ -110,7 +110,7 @@ export default function StepCutoff({ s, set, derived }) {
                 <th scope="col">D en membrana</th>
                 <th scope="col">Cl</th>
                 <th scope="col">Cl / Cl urea</th>
-                <th scope="col">Fuente</th>
+                <th scope="col">Origen de D en membrana</th>
               </tr>
             </thead>
             <tbody>
@@ -118,14 +118,19 @@ export default function StepCutoff({ s, set, derived }) {
                 <tr key={r.id} data-current={r.id === s.soluteId}>
                   <td>{r.name}</td>
                   <td>{r.mw.toLocaleString('es-AR')}</td>
-                  <td>{sci(r.dWater, 2)}</td>
+                  <td>
+                    {sci(r.dWater, 2)}
+                    {!r.dWaterSrc && <span className="flagmark">sin fuente</span>}
+                  </td>
                   <td>
                     {sci(r.D, 2)}
                     {!r.anchor && !r.medido && <span className="flagmark">estimado</span>}
                   </td>
                   <td>{r.cl < 0.005 ? sci(r.cl, 2) : num(r.cl, 2)}</td>
                   <td className="table__delta">{r.cl / urea.cl < 0.001 ? sci(r.cl / urea.cl, 2) : num(r.cl / urea.cl, 4)}</td>
-                  <td className="table__delta">{r.fuente ? 'Colton 1971' : '—'}</td>
+                  <td className="table__delta">
+                    {s.diffModel === 'colton' && r.dMemSrc ? r.dMemSrc : 'Estimado por el modelo'}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -141,11 +146,19 @@ export default function StepCutoff({ s, set, derived }) {
         </p>
 
         <p className="figure__note">
-          <b>Fuente.</b> Colton, Smith, Merrill &amp; Farrell (1971), <i>Permeability Studies with
-          Cellulosic Membranes</i>, J. Biomed. Mater. Res. 5(6), 459–488. Las difusividades en agua
-          salen de la Tabla I (solución salina isotónica, 37 °C) y las resistencias de membrana de
-          la Tabla III (Cuprophane PT-150, 37 °C). Los valores marcados como <i>estimados</i>{' '}
-          corresponden a solutos que no figuran en ese trabajo.
+          <b>Procedencia de los datos.</b> Las difusividades en agua salen de la Tabla I de Colton
+          (solución salina isotónica, 37 °C), salvo las de fosfato y β₂-microglobulina, que no
+          figuran en ese trabajo y están cargadas como valores típicos de literatura sin verificar.
+          La difusividad de la urea <i>en la membrana</i> es la que da la consigna, no Colton: lo
+          que aporta el paper es la resistencia de cada soluto (Tabla III, Cuprophane PT-150,
+          37 °C), cuyo cociente contra la urea permite derivar las demás. La resistencia de la
+          albúmina se midió a 27 °C (Tabla V), no a 37 como el resto.
+        </p>
+
+        <p className="figure__note">
+          Colton, C. K., Smith, K. A., Merrill, E. W. &amp; Farrell, P. C. (1971).{' '}
+          <i>Permeability Studies with Cellulosic Membranes</i>. Journal of Biomedical Materials
+          Research, 5(6), 459–488.
         </p>
       </div>
     </section>
